@@ -16,7 +16,7 @@ function CommandsCommandViewModel(params) {
   self.released = params.commandObject.value.released
   self.variables = params.commandObject.value.variables
   self.allowedVariables = params.allowedVariables
-  self.allowedCommandActions = ["octoprint", "printer", "plugin_psucontrol", "save_vars", "listen_vars", "set_active_profile", "system_command"]
+  self.allowedCommandActions = ["octoprint", "printer", "plugin_psucontrol", "plugin_mqtt", "save_vars", "listen_vars", "set_active_profile", "system_command"]
 
   self.commandText = ko.pureComputed(function() {
     if (self.alias() == null || self.alias === "") {
@@ -42,6 +42,12 @@ function CommandsCommandViewModel(params) {
       case "plugin_psucontrol":
         newCommandActionMap["command"] = "on"
         newCommandActionMap["hotend_max"] = 50
+        break;
+      case "plugin_mqtt":
+        newCommandActionMap["message"] = ""
+        newCommandActionMap["topic"] = ""
+        newCommandActionMap["retained"] = false
+        newCommandActionMap["profile"] = null
         break;
       case "octoprint":
         newCommandActionMap["command"] = "cancel_print"

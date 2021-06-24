@@ -168,7 +168,7 @@ class Usb_keyboardPlugin(octoprint.plugin.StartupPlugin,
                 returncode, stdout, stderr = self.caller.call(system_command, shell=should_use_separate_shell)
               except Exception as e:
                 self._logger.error(f"System command '{system_command}' failed due to '{e}'!")
-              if returncode is not 0:
+              if returncode != 0:
                 self._logger.error(f"System command '{system_command}' failed due to '{stderr}'!")
             else:
               self._logger.info("No registered system command for '{command}'")
@@ -212,8 +212,20 @@ class Usb_keyboardPlugin(octoprint.plugin.StartupPlugin,
           returncode, stdout, stderr = self.caller.call(command, shell=True)
         except Exception as e:
           self._logger.error(f"Custom system command '{command}' failed due to '{e}'!")
-        if returncode is not 0:
+        if returncode != 0:
           self._logger.error(f"Custom system command '{command}' failed due to '{stderr}'!")
+
+      # ------------------ Plugin MQTT -------------------
+      # {"type":"plugin_mqtt", "message":"", "topic":"", "retained": false}
+      if current_action_type == "plugin_mqtt":
+        if(self.mqtt_publish is None):
+          self._logger.error("The MQTT plugin not installed.")
+        else :
+          message = current_action.get("message")
+          topic = current_action.get("topic")
+          retained = current_action.get("retained")
+          self._logger.info(f"Published MQTT message in topic '{topic}': '{message}'{' (retained)' if retained else ''}")
+          self.mqtt_publish(topic, message, retained=retained, allow_queueing=False)
       
       # ------------------ Saving Vars -------------------
       # {"type":"save_vars",   "variables":["distance", "hotend", "bed"]}
@@ -462,6 +474,7 @@ class Usb_keyboardPlugin(octoprint.plugin.StartupPlugin,
     self.should_stop_polling=False
     self.octoprint_last_command = None
     self.octoprint_last_command_presses = 0
+    self.mqtt_publish = None
 
     eventManager().subscribe("plugin_usb_keyboard_key_event", self._key_event)
 
@@ -470,7 +483,10 @@ class Usb_keyboardPlugin(octoprint.plugin.StartupPlugin,
 
     self._logger.info("Started Keyboard Listener")
 
-
+    helpers = self._plugin_manager.get_helpers("mqtt", "mqtt_publish")
+    if helpers:
+      if "mqtt_publish" in helpers:
+        self.mqtt_publish = helpers["mqtt_publish"]
 
     # self.listener = threading.Thread(target=key_read_loop, daemon=True) # Make thread a daemon thread
     # self.listener.start()
@@ -936,6 +952,8 @@ class Usb_keyboardPlugin(octoprint.plugin.StartupPlugin,
       "js/viewmodels/commands/command/octoprint_viewmodel.js",
       #       Plugin PSUControl
       "js/viewmodels/commands/command/plugin_psucontrol_viewmodel.js",
+      #       Plugin MQTT
+      "js/viewmodels/commands/command/plugin_mqtt_viewmodel.js",
       #       System Command
       "js/viewmodels/commands/command/system_command_viewmodel.js",
 

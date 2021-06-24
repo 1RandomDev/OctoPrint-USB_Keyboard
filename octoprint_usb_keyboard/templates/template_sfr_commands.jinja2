@@ -133,6 +133,9 @@
         <!-- ko if: $data.type() == "plugin_psucontrol" -->
         <li><sfr-commands-command-plugin-psucontrol params='commandActionObject: $data, parentArray: $parent.pressed, profile: $parent.profile, locked: $parent.locked'></sfr-commands-command-plugin-psucontrol></li>
         <!-- /ko -->
+        <!-- ko if: $data.type() == "plugin_mqtt" -->
+        <li><sfr-commands-command-plugin-mqtt params='commandActionObject: $data, parentArray: $parent.pressed, profile: $parent.profile, locked: $parent.locked'></sfr-commands-command-plugin-mqtt></li>
+        <!-- /ko -->
         <!-- ko if: $data.type() == "octoprint" -->
         <li><sfr-commands-command-octoprint params='commandActionObject: $data, parentArray: $parent.pressed, profile: $parent.profile, locked: $parent.locked'></sfr-commands-command-octoprint></li>
         <!-- /ko -->
@@ -158,6 +161,9 @@
         <!-- /ko -->
         <!-- ko if: $data.type() == "plugin_psucontrol" -->
         <li><sfr-commands-command-plugin-psucontrol params='commandActionObject: $data, parentArray: $parent.released, profile: $parent.profile, locked: $parent.locked'></sfr-commands-command-plugin-psucontrol></li>
+        <!-- /ko -->
+        <!-- ko if: $data.type() == "plugin_mqtt" -->
+        <li><sfr-commands-command-plugin-mqtt params='commandActionObject: $data, parentArray: $parent.released, profile: $parent.profile, locked: $parent.locked'></sfr-commands-command-plugin-mqtt></li>
         <!-- /ko -->
         <!-- ko if: $data.type() == "octoprint" -->
         <li><sfr-commands-command-octoprint params='commandActionObject: $data, parentArray: $parent.released, profile: $parent.profile, locked: $parent.locked'></sfr-commands-command-octoprint></li>
@@ -458,6 +464,62 @@
   Prevent PSU shutdown if a hotend is hotter than <input placeholder="˚C" class="temperature" data-bind="textInput: hotendMax, attr: {disabled: locked}" maxlength="3" size="3"/>˚C
   <br>
   PSU Command: <select data-bind="options: supportedCommands, value: command, attr: {disabled: locked}"></select>
+</template>
+
+<template id='template-sfr-commands-command-plugin-mqtt'>
+  <strong>Command Type:</strong>
+  &emsp;<span data-bind="text: type"></span>
+  &emsp;<button class="btn btn-default fa fa-arrow-up" data-bind="click: moveSelfUp, attr: {disabled: locked}"></button>
+  &nbsp;<button class="btn btn-default fa fa-arrow-down" data-bind="click: moveSelfDown, attr: {disabled: locked}"></button>
+  &nbsp;<button class="btn btn-danger" data-bind="click: deleteSelf, attr: {disabled: locked}">{{ _('-') }}</button>
+  &nbsp;<button class="btn" data-bind="css: infoClass, click: toggleInfo"></button>
+
+  <div data-bind="visible: showingInfo">
+    <hr>
+    <p><b>MQTT Command Configuration</b>&emsp;<button class="btn" data-bind="css: infoClass, click: toggleInfo"></button></p>
+    <ul>
+      <li>
+        <button class="btn btn-default fa fa-arrow-up"></button><button class="btn btn-default fa fa-arrow-down"></button> moves this command up/down, respectively,
+        in the command execution order.
+      </li>
+      <li>
+        <button class="btn btn-danger">{{ _('-') }}</button> deletes this command. Poof. Gone.
+      </li>
+      <li>
+        <input placeholder="my topic" /> MQTT topic the message gets published to.
+      </li>
+      <li>
+        <input placeholder="my message" /> The message to publish.
+      </li>
+      <li>
+        <input type="checkbox" style="width: auto;" /> determines if the message should be retained.
+      </li>
+    </ul>
+    <p>Obviously, this command only works if you have the <a href="https://plugins.octoprint.org/plugins/mqtt/">MQTT</a> plugin installed.</p>
+    <hr>
+  </div>
+  <table>
+    <tbody>
+      <tr>
+        <td>Topic:</td>
+        <td>
+          <input placeholder="my topic" data-bind="textInput: topic, attr: {disabled: locked}" />
+        </td>
+      </tr>
+      <tr>
+        <td>Message:</td>
+        <td>
+          <input placeholder="my message" data-bind="textInput: message, attr: {disabled: locked}" />
+        </td>
+      </tr>
+      <tr>
+        <td>Retained:</td>
+        <td>
+          <input type="checkbox" style="width: auto;" data-bind="checked: retained, attr: {disabled: locked}" /></label>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </template>
 
 <template id='template-sfr-commands-command-octoprint'>
