@@ -202,7 +202,19 @@ class Usb_keyboardPlugin(octoprint.plugin.StartupPlugin,
         # https://github.com/cp2004/OctoPrint-WS281x_LED_Status/blob/cbe84ded3b47bbe53aa7c67707a90b6e796f6e89/octoprint_ws281x_led_status/util.py#L101-L134
         # The command line caller is a wrapper around Sarge, any args you can pass to sarge can be passed here
 
-
+      # ------------------ System command -------------------
+      # {"type":"system_command", "command":"./control.sh"}
+      if current_action_type == "system_command":
+        command = current_action.get("command")
+        returncode = 0
+        try:
+          self._logger.info(f"Running custom system command '{command}'")
+          returncode, stdout, stderr = self.caller.call(command, shell=True)
+        except Exception as e:
+          self._logger.error(f"Custom system command '{command}' failed due to '{e}'!")
+        if returncode is not 0:
+          self._logger.error(f"Custom system command '{command}' failed due to '{stderr}'!")
+      
       # ------------------ Saving Vars -------------------
       # {"type":"save_vars",   "variables":["distance", "hotend", "bed"]}
       if current_action_type == "save_vars":
@@ -924,6 +936,8 @@ class Usb_keyboardPlugin(octoprint.plugin.StartupPlugin,
       "js/viewmodels/commands/command/octoprint_viewmodel.js",
       #       Plugin PSUControl
       "js/viewmodels/commands/command/plugin_psucontrol_viewmodel.js",
+      #       System Command
+      "js/viewmodels/commands/command/system_command_viewmodel.js",
 
       # Knockout Libraries
       "js/knockout_libraries/knockout-repeat.js",

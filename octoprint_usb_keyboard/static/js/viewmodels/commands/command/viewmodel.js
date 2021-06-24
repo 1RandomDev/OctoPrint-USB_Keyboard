@@ -16,7 +16,7 @@ function CommandsCommandViewModel(params) {
   self.released = params.commandObject.value.released
   self.variables = params.commandObject.value.variables
   self.allowedVariables = params.allowedVariables
-  self.allowedCommandActions = ["octoprint", "printer", "plugin_psucontrol", "save_vars", "listen_vars", "set_active_profile"]
+  self.allowedCommandActions = ["octoprint", "printer", "plugin_psucontrol", "save_vars", "listen_vars", "set_active_profile", "system_command"]
 
   self.commandText = ko.pureComputed(function() {
     if (self.alias() == null || self.alias === "") {
@@ -49,6 +49,10 @@ function CommandsCommandViewModel(params) {
         break;
       case "set_active_profile":
         newCommandActionMap["command"] = "set_active_profile"
+        newCommandActionMap["profile"] = null
+        break;
+      case "system_command":
+        newCommandActionMap["command"] = ""
         newCommandActionMap["profile"] = null
         break;
       default:

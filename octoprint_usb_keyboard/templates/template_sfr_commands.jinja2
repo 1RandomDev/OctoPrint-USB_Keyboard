@@ -139,6 +139,9 @@
         <!-- ko if: $data.type() == "set_active_profile" -->
         <li><sfr-commands-command-set-active-profile params='commandActionObject: $data, parentArray: $parent.pressed, profile: $parent.profile, profileNames: $parent.profileNames, locked: $parent.locked'></sfr-commands-command-set-active-profile></li>
         <!-- /ko -->
+        <!-- ko if: $data.type() == "system_command" -->
+        <li><sfr-commands-command-system-command params='commandActionObject: $data, parentArray: $parent.pressed, profile: $parent.profile, profileNames: $parent.profileNames, locked: $parent.locked'></sfr-commands-command-system-command></li>
+        <!-- /ko -->
       <!-- /ko -->
       </ol>
     </li>
@@ -161,6 +164,9 @@
         <!-- /ko -->
         <!-- ko if: $data.type() == "set_active_profile" -->
         <li><sfr-commands-command-set-active-profile params='commandActionObject: $data, parentArray: $parent.released, profile: $parent.profile, profileNames: $parent.profileNames, locked: $parent.locked'></sfr-commands-command-set-active-profile></li>
+        <!-- /ko -->
+        <!-- ko if: $data.type() == "system_command" -->
+        <li><sfr-commands-command-system-command params='commandActionObject: $data, parentArray: $parent.released, profile: $parent.profile, profileNames: $parent.profileNames, locked: $parent.locked'></sfr-commands-command-system-command></li>
         <!-- /ko -->
       <!-- /ko -->
       </ol>
@@ -488,4 +494,33 @@
   Octoprint Command: <select data-bind="options: supportedCommands, value: command, attr: {disabled: locked}"></select>
   <br>
   Requires <input placeholder="#" data-bind="textInput: presses_required, attr: {disabled: locked}" maxlength="3" size="3"/> presses to trigger.
+</template>
+
+<template id='template-sfr-commands-command-system-command'>
+  <strong>Command Type:</strong>
+  &emsp;<span data-bind="text: type"></span>
+  &emsp;<button class="btn btn-default fa fa-arrow-up" data-bind="click: moveSelfUp, attr: {disabled: locked}"></button>
+  &nbsp;<button class="btn btn-default fa fa-arrow-down" data-bind="click: moveSelfDown, attr: {disabled: locked}"></button>
+  &nbsp;<button class="btn btn-danger" data-bind="click: deleteSelf, attr: {disabled: locked}">{{ _('-') }}</button>
+  &nbsp;<button class="btn" data-bind="css: infoClass, click: toggleInfo"></button>
+
+  <div data-bind="visible: showingInfo">
+    <hr>
+    <p><b>System Command Configuration</b>&emsp;<button class="btn" data-bind="css: infoClass, click: toggleInfo"></button></p>
+    <ul>
+      <li>
+        <button class="btn btn-default fa fa-arrow-up"></button><button class="btn btn-default fa fa-arrow-down"></button> moves this command up/down, respectively,
+        in the command execution order.
+      </li>
+      <li>
+        <button class="btn btn-danger">{{ _('-') }}</button> deletes this command. Poof. Gone.
+      </li>
+      <li>
+        <input placeholder="./control.sh" /> The command which should be executed.
+      </li>
+    </ul>
+    <hr>
+  </div>
+  <br>
+  System Command: <input style="width: 290px" placeholder="./control.sh" data-bind="textInput: command, attr: {disabled: locked}"\>
 </template>
