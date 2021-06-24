@@ -4,10 +4,9 @@ Enables users to use a USB keyboard to control their printer through Octoprint.
 
 ## Setup
 
-Install via the bundled [Plugin Manager](https://docs.octoprint.org/en/master/bundledplugins/pluginmanager.html)
-or manually using this URL:
+Install using this URL:
 
-    https://github.com/barrettford/OctoPrint-Usb_keyboard/archive/master.zip
+    https://github.com/1RandomDev/OctoPrint-USB_Keyboard/archive/master.zip
 
 
 ## Configuration

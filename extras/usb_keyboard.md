@@ -2,17 +2,17 @@
 layout: plugin
 
 id: usb_keyboard
-title: OctoPrint-Usb_keyboard
+title: OctoPrint-USB_Keyboard
 description: Plugin to enable controlling a connected 3D printer with a USB keyboard
-author: Barrett Ford
+author: Barrett Ford & 1RandomDev
 license: AGPLv3
 
 # TODO
 date: today's date in format YYYY-MM-DD, e.g. 2015-04-21
 
-homepage: https://github.com/barrettford/OctoPrint-Usb_keyboard
-source: https://github.com/barrettford/OctoPrint-Usb_keyboard
-archive: https://github.com/barrettford/OctoPrint-Usb_keyboard/archive/master.zip
+homepage: https://github.com/1RandomDev/OctoPrint-USB_Keyboard
+source: https://github.com/1RandomDev/OctoPrint-USB_Keyboard
+archive: https://github.com/1RandomDev/OctoPrint-USB_Keyboard/archive/master.zip
 
 # TODO
 # Set this to true if your plugin uses the dependency_links setup parameter to include
