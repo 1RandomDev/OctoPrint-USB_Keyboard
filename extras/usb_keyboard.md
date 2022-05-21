@@ -95,6 +95,3 @@ compatibility:
   python: ">=2.7,<3"
 
 ---
-
-**TODO**: Longer description of your plugin, configuration examples etc. This part will be visible on the page at
-http://plugins.octoprint.org/plugin/usb_keyboard/
