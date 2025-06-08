@@ -65,8 +65,6 @@ class KeyboardListenerThread(threading.Thread):
     options = []
     devices = [InputDevice(device) for device in list_devices()]
     for device in devices:
-      message += f"  Device {device}\n"
-      options.append(str(device)[7:24].replace(",", ""))
-      message += f"    Info {device.info}\n"
-      message += f"    Physical {device.phys}\n"
+      message += f"- Device {device}, {device.info}\n"
+      options.append(device.path)
     return message, options
